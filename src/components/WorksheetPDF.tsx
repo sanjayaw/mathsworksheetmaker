@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottomLine: {
-    borderTop: '1px solid black',
+    height: 1,
+    backgroundColor: 'black',
     marginTop: 3,
     marginBottom: 2,
   },

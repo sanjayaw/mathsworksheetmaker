@@ -12,9 +12,7 @@ A React app that generates printable multiplication practice worksheets as downl
 - Scaffolded hints (full → partial → structure → none) that reset at each difficulty step-change
 - Partial products calculation for both single-digit and 2-digit multipliers
 
-**Known Issues to Fix:**
-1. **bottomLine not rendering** — Uses `borderTop: '1px solid black'` but @react-pdf/renderer may need explicit height. Fix: add `height: 1` or use `backgroundColor: 'black'`
-2. **Inconsistent "+" signs** — 'partial' uses `rowCount - 1` for blanks (always shows "+"), while 'structure' uses `partialProducts.length` then `extraRows` (split logic). Should unify approach.
+**Known Issues:** None currently. All rendering issues resolved.
 
 ---
 
@@ -111,39 +109,9 @@ type Problem = {
 
 ---
 
-## Remaining Fixes
-
-### Fix 1: bottomLine not visible
-**Problem:** Solid line above "=" doesn't render.
-
-**Code:** `bottomLine: { borderTop: '1px solid black', marginTop: 3, marginBottom: 2 }`
-
-**Fix:** Change to use explicit height:
-```javascript
-bottomLine: {
-  height: 1,
-  backgroundColor: 'black',
-  marginTop: 3,
-  marginBottom: 2,
-}
-```
-
-### Fix 2: Unify "+" sign logic across hint levels
-**Current behavior (verified from code):**
-- `full`: `index > 0 ? '+' : ' '` over `partialProducts` ✓
-- `partial`: first row = ' ', then `rowCount - 1` rows all with '+' ✓
-- `structure`: `index > 0 ? '+' : ' '` over `partialProducts`, then `extraRows` with ' ' (no "+")
-- `none`: same as structure but with white text
-
-**Issue:** `extraRows` in structure/full don't show "+", but they represent working space, not partial products. This is actually *correct* — extra padding rows shouldn't have "+".
-
-**Conclusion:** Logic is correct. Visual inconsistency is from bottomLine not rendering, making boxes look different heights.
-
----
-
 ## Next Steps
 
-1. **Fix bottomLine** — Change `borderTop` to `height: 1` + `backgroundColor: 'black'` in WorksheetPDF.tsx:99-103
+1. ~~Fix bottomLine~~ ✅ Done
 2. Test PDF download, verify solid line appears above "=" in all boxes
 3. Print and validate with your son
 4. Future enhancements:

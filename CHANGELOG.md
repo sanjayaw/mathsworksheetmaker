@@ -15,5 +15,5 @@
 - Hints reset at each difficulty step-change (re-scaffolding)
 - Minimum row count based on multiplicand digits (ensures 4-digit numbers get 4 working lines)
 
-### Known Issues
-- `bottomLine` (solid line above "=") not rendering — needs style fix
+### Fixed
+- `bottomLine` (solid line above "=") now renders correctly using backgroundColor instead of borderTop
