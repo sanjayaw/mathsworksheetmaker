@@ -1,18 +1,124 @@
-# Maths Tutor - Multiplication Worksheet Generator
+# Maths Tutor - Worksheet Generator
 
 ## Project Overview
-A React app that generates printable multiplication practice worksheets as downloadable PDFs. Designed for parents to help kids (ages 9-11) practice multi-digit multiplication using the partial products (expanded form) method.
+A React app that generates printable maths practice worksheets as downloadable PDFs. Designed for parents to help kids (ages 9-11) practice various maths topics with progressive difficulty and scaffolded hints.
 
 ## Current State
 **Working:**
 - React + Vite + TypeScript setup
 - PDF generation with @react-pdf/renderer
+- Topic selector UI with dropdown
 - 80 problems across 4 pages (20 per page)
-- Progressive difficulty ramp with 13 tiers
-- Scaffolded hints (full → partial → structure → none) that reset at each difficulty step-change
-- Partial products calculation for both single-digit and 2-digit multipliers
+- Progressive difficulty ramp with hint fading
 
-**Known Issues:** None currently. All rendering issues resolved.
+**Available Topics:**
+1. **Multiplication (Standard Algorithm)** — Traditional method with carry boxes
+2. **Multiplication (Partial Products)** — Break into place values method
+
+**Coming Soon:**
+- Long Division
+- Fractions
+
+---
+
+## Phase 2: Multi-Topic Support
+
+### Topics to Support
+1. **Multiplication (Standard Algorithm)** ← PRIMARY - what the kid is learning now
+2. **Multiplication (Partial Products)** ← already built
+3. **Long Division** ← coming soon
+4. **Fractions** ← coming soon
+
+### UI Changes
+- Add topic selector dropdown on main page
+- "Download Worksheet" generates PDF for selected topic
+- Each topic has its own problem generator + PDF layout
+
+### Architecture Refactor
+
+```
+src/
+├── App.tsx                         — Topic selector + download button
+├── types/
+│   └── index.ts                    — Shared types + topic-specific types
+├── topics/
+│   ├── index.ts                    — Topic registry (maps topic ID → generator + renderer)
+│   ├── multiplication-standard/
+│   │   ├── generateProblems.ts     — Standard algorithm problems
+│   │   └── WorksheetPDF.tsx        — Carry boxes layout
+│   ├── multiplication-partial/
+│   │   ├── generateProblems.ts     — (move existing code here)
+│   │   └── WorksheetPDF.tsx        — (move existing code here)
+│   ├── long-division/
+│   │   ├── generateProblems.ts     — (stub)
+│   │   └── WorksheetPDF.tsx        — (stub)
+│   └── fractions/
+│       ├── generateProblems.ts     — (stub)
+│       └── WorksheetPDF.tsx        — (stub)
+└── components/
+    └── TopicSelector.tsx           — Dropdown component
+```
+
+### Multiplication (Standard Algorithm) Layout
+
+**With carry boxes (scaffolded):**
+```
+       ┌─┐┌─┐
+       │²││¹│        ← small boxes for carries (pre-filled for 'full' hint)
+       └─┘└─┘
+        3  2
+      ×    9
+      ──────
+      ______         ← answer line
+```
+
+**Hint levels:**
+- `full`: Carry boxes pre-filled with correct carry digits
+- `partial`: First carry shown, rest empty boxes
+- `structure`: Empty carry boxes shown
+- `none`: No carry boxes, just blank space above
+
+**Difficulty ramp (same structure as partial products):**
+| Problems | Multiplicand | Multiplier | Hints |
+|----------|-------------|------------|-------|
+| 1–6 | 10–49 | 2–3 | full |
+| 7–12 | 10–99 | 2–5 | partial |
+| 13–18 | 10–99 | 4–9 | structure |
+| 19–26 | 10–99 | 6–9 | none |
+| ... | (same ramp as before) | ... | ... |
+
+### Carry Calculation Logic
+For 32 × 9:
+1. 2 × 9 = 18 → write 8, carry 1
+2. 3 × 9 = 27, + 1 = 28 → write 28
+
+Carries array: [1] (carry from ones to tens)
+For 3-digit: carries array has 2 elements
+For 4-digit: carries array has 3 elements
+
+---
+
+## Implementation Phases
+
+### Phase 2.1: Refactor to topic-based architecture
+1. Create `topics/` folder structure
+2. Move existing multiplication-partial code
+3. Create topic registry
+4. Update App.tsx with topic selector
+5. Test existing functionality still works
+
+### Phase 2.2: Add Multiplication (Standard Algorithm)
+1. Create carry calculation function
+2. Create standard algorithm PDF layout with carry boxes
+3. Apply same difficulty ramp
+4. Test PDF output
+
+### Phase 2.3: Stub Long Division & Fractions
+1. Create placeholder generators (return empty or simple problems)
+2. Create placeholder PDF layouts
+3. Mark as "Coming Soon" in UI if selected
+
+---
 
 ---
 
@@ -112,12 +218,14 @@ type Problem = {
 ## Next Steps
 
 1. ~~Fix bottomLine~~ ✅ Done
-2. Test PDF download, verify solid line appears above "=" in all boxes
-3. Print and validate with your son
-4. Future enhancements:
-   - Topic selection UI (not just multiplication)
-   - Difficulty slider
+2. ~~Topic selector UI~~ ✅ Done
+3. ~~Multiplication (Standard Algorithm)~~ ✅ Done
+4. Print and validate with your son
+5. Future enhancements:
+   - Long Division
+   - Fractions
    - Answer key (separate page)
+   - Difficulty slider
    - Session history in Postgres (later phase)
 
 ---

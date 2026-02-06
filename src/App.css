@@ -49,3 +49,32 @@
   font-size: 0.9rem;
   color: #666;
 }
+
+.topic-selector {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.topic-selector label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.topic-selector select {
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  min-width: 280px;
+}
+
+.topic-selector select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.topic-description {
+  margin-top: 8px;
+  color: #666;
+  font-size: 14px;
+}

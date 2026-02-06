@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
-import { WorksheetPDF } from './components/WorksheetPDF';
-import { generateProblems } from './utils/generateProblems';
+import { TopicSelector } from './components/TopicSelector';
+import { topics } from './topics';
+import type { TopicId } from './types';
 import './App.css';
 
 function App() {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<TopicId>('multiplication-partial');
 
   const handleDownload = async () => {
+    const topic = topics[selectedTopic];
+
+    if (!topic.available) {
+      alert('This topic is coming soon!');
+      return;
+    }
+
     try {
       setIsGenerating(true);
       
       // Generate fresh random problems
-      const problems = generateProblems();
+      const problems = topic.generateProblems();
+      const WorksheetPDF = topic.WorksheetPDF;
       
       // Generate PDF blob
       const blob = await pdf(<WorksheetPDF problems={problems} />).toBlob();
@@ -21,7 +31,7 @@ function App() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `multiplication-worksheet-${Date.now()}.pdf`;
+      link.download = `${selectedTopic}-worksheet-${Date.now()}.pdf`;
       link.click();
       
       // Cleanup
@@ -37,10 +47,14 @@ function App() {
   return (
     <div className="app">
       <h1 className="title">Maths Tutor - Worksheet Generator</h1>
+      <TopicSelector
+        selectedTopic={selectedTopic}
+        onTopicChange={setSelectedTopic}
+      />
       <button 
         className="download-button" 
         onClick={handleDownload}
-        disabled={isGenerating}
+        disabled={isGenerating || !topics[selectedTopic].available}
       >
         {isGenerating ? 'Generating...' : 'Download Worksheet'}
       </button>

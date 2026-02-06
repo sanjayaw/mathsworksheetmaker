@@ -1,5 +1,5 @@
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import type { Problem } from '../types';
+import type { Problem } from '../../types';
 
 interface WorksheetPDFProps {
   problems: Problem[];
@@ -201,12 +201,12 @@ const ProblemBox = ({ problem }: { problem: Problem }) => (
     <View style={styles.badge}>
       <Text>{problem.number}</Text>
     </View>
-    
+
     <View style={styles.problemContent}>
       <Text style={styles.multiplicand}>{problem.multiplicand}</Text>
       <Text style={styles.multiplier}>× {problem.multiplier}</Text>
       <View style={styles.topLine} />
-      
+
       <ProblemHints problem={problem} />
     </View>
   </View>
@@ -214,9 +214,11 @@ const ProblemBox = ({ problem }: { problem: Problem }) => (
 
 // Main PDF component
 export const WorksheetPDF = ({ problems }: WorksheetPDFProps) => {
+  const pageCount = Math.ceil(problems.length / 20);
+
   return (
     <Document>
-      {[0, 1, 2, 3].map((pageIndex) => {
+      {Array.from({ length: pageCount }, (_, pageIndex) => {
         const pageProblems = problems.slice(pageIndex * 20, (pageIndex + 1) * 20);
         return (
           <Page key={pageIndex} size="A4" style={styles.page}>
@@ -226,7 +228,7 @@ export const WorksheetPDF = ({ problems }: WorksheetPDFProps) => {
             <Text style={styles.nameDate}>
               Name: _______________    Date: _______________
             </Text>
-            
+
             <View style={styles.grid}>
               {pageProblems.map((problem) => (
                 <ProblemBox key={problem.number} problem={problem} />

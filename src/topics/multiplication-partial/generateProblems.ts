@@ -1,4 +1,4 @@
-import type { Problem } from '../types';
+import type { Problem } from '../../types';
 
 /**
  * Generates a random integer between min and max (inclusive)
@@ -18,23 +18,23 @@ function calculatePartialProducts(multiplicand: number, multiplier: number): num
     const digits: number[] = [];
     let temp = multiplicand;
     let placeValue = 1;
-    
+
     while (temp > 0) {
       const digit = temp % 10;
       digits.push(digit * placeValue * multiplier);
       temp = Math.floor(temp / 10);
       placeValue *= 10;
     }
-    
+
     return digits; // Already in ones, tens, hundreds order
   } else {
     // 2-digit multiplier: multiplicand × ones, multiplicand × tens-value
     const ones = multiplier % 10;
     const tens = Math.floor(multiplier / 10) * 10;
-    
+
     return [
       multiplicand * ones,
-      multiplicand * tens
+      multiplicand * tens,
     ];
   }
 }
