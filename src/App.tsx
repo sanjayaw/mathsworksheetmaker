@@ -45,14 +45,14 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className={`app${isGenerating ? ' generating' : ''}`}>
       <h1 className="title">Maths Tutor - Worksheet Generator</h1>
       <TopicSelector
         selectedTopic={selectedTopic}
         onTopicChange={setSelectedTopic}
       />
-      <button 
-        className="download-button" 
+      <button
+        className={`download-button${isGenerating ? ' generating' : ''}`}
         onClick={handleDownload}
         disabled={isGenerating || !topics[selectedTopic].available}
       >

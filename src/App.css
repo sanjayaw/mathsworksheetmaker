@@ -44,6 +44,19 @@
   box-shadow: none;
 }
 
+.download-button.generating {
+  background-color: #7cb87e;
+  cursor: wait;
+}
+
+.app.generating {
+  cursor: wait;
+}
+
+.app.generating * {
+  cursor: wait;
+}
+
 .description {
   margin-top: 1rem;
   font-size: 0.9rem;
